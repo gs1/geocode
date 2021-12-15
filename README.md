@@ -16,7 +16,31 @@ The second ten digits represent longitude measured in decimal degrees east of th
 
 The following diagrams provide some further explanation of this approach:
 
-![Latitude and longitude](GeoCodePage1.svg?raw=true "Latitude and longitude")
+![Latitude and longitude](GeoCodeIntroPage.svg?raw=true "Latitude and longitude")
+
+Flowchart for encoding:
+
+![Encoding flowchart](Flowchart1.svg?raw=true "Flowchart for encoding")
+
+Flowchart for decoding:
+
+![Decoding flowchart](Flowchart2.svg?raw=true "Flowchart for decoding")
+
+Summary of formulae:
+
+![Formulae summary](Summary.svg?raw=true "Summary of formulae")
+
+Worked Example 1:
+
+![Worked example 1](WorkedExample1.svg?raw=true "Worked example 1")
+
+Worked Example 2:
+
+![Worked example 2](WorkedExample2.svg?raw=true "Worked example 2")
+
+
+
+
 
 
 
