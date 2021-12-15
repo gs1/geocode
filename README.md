@@ -9,7 +9,7 @@ Using 20 numeric digits it is possible to encode WGS84 latitude/longitude coordi
 
 That's because 0.0000001 degrees corresponds to approximately 1.1cm  on the surface of the Earth (2&pi; * 6371,000m / 1E7 / 360.
 
-In this approach we use two 10 digit fields that are concatenated together.  
+In this approach we use two 10 digit fields that are concatenated together to form a 20-digit numeric geocode string.  
 
 The first ten digits represent latitude measured in decimal degrees northwards from the goegraphic south pole, then multiplied by 10 million and (if necessary) left-padded with '0' digits to reach a total of 10 digits.  This approach means that the value is always positive, ranging from 0 at the geographic south pole to 1800000000 at the geographic north pole.
 
