@@ -19,11 +19,11 @@ The following diagrams provide some further explanation of this approach:
 
 ![Latitude and longitude](GeoCodeIntroPage.svg?raw=true "Latitude and longitude")
 
-Flowchart for encoding latitude, longitude as a 20-digit geocode:
+Flowchart for encoding latitude and longitude as a 20-digit geocode:
 
 ![Encoding flowchart](Flowchart1.svg?raw=true "Flowchart for encoding")
 
-Flowchart for decoding a 20-digit geocode to latitude, longitude:
+Flowchart for decoding a 20-digit geocode to latitude and longitude:
 
 ![Decoding flowchart](Flowchart2.svg?raw=true "Flowchart for decoding")
 
