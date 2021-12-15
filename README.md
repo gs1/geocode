@@ -6,6 +6,7 @@ A demo page is available at https://gs1.github.io/geocode/
 Within a barcode, an all-numeric geocode can be encoded more efficiently than a code that requires symbol characters such as + or - or decimal point or alphabetic characters such as N, S, E, W.
 
 Using 20 numeric digits it is possible to encode WGS84 latitude/longitude coordinates with a precision of around 1.1 centimetres.
+
 That's because 0.0000001 degrees corresponds to approximately 1.1cm  on the surface of the Earth (2&pi; * 6371,000m / 1E7 / 360.
 
 In this approach we use two 10 digit fields that are concatenated together.  
