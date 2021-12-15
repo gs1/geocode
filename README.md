@@ -16,7 +16,7 @@ The second ten digits represent longitude measured in decimal degrees east of th
 
 The following diagrams provide some further explanation of this approach:
 
-
+![Latitude and longitude](GeoCodePage1.svg?raw=true "Latitude and longitude")
 
 
 
