@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <style type="text/css" rel="stylesheet">
 	body {font-family: Verdana, Geneva, Arial, Helvetica}
 	.geocode  {width: 20em; background-color: #FFFFCC;}
@@ -120,12 +120,13 @@ function getComponent(obj,key) {
 	}
 }
 
-let app1 = new Vue({
-	el: "#app1",
-	data : {
-		inputLatitude: inputLatitude,
-		inputLongitude: inputLongitude,
-		inputGeocode: inputGeocode,
+	Vue.createApp({
+		data() {
+          return {
+			inputLatitude: inputLatitude,
+			inputLongitude: inputLongitude,
+			inputGeocode: inputGeocode
+		  }
 		},
 	computed : {
 		outputGeocode : function() {
@@ -170,7 +171,7 @@ let app1 = new Vue({
 		}
 			
 	}
-});	
+}).mount("#app1");
 
 
 </script>
