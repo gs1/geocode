@@ -3,12 +3,19 @@
 <head>
 <meta charset="utf-8">
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<link rel='stylesheet' href='https://unpkg.com/leaflet@1.2.0/dist/leaflet.css'>
 <style type="text/css" rel="stylesheet">
 	body {font-family: Verdana, Geneva, Arial, Helvetica}
 	.geocode  {width: 20em; background-color: #FFFFCC;}
+	#map { width:calc(100% - 100px); height: 500px; }
+  .showing {visibility: show; height:500px;} 
+  .hidden {visibility: hidden;  height: 0px;} 
+
 </style>
 </head>
 <body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.0.4/turf.min.js'></script>
 
 <h1>Experiments with all-numeric geocodes</h1>
 
@@ -16,10 +23,15 @@
 <p>Using 20 numeric digits it is possible to encode WGS84 latitude/longitude coordinates with a precision of around 1.1 centimetres</p>
 <p>That's because 0.0000001 degrees corresponds to approximately 1.1cm  on the surface of the Earth (2&pi; * 6371,000m / 1E7 / 360)</p>
 <p>Further technical details about this idea are provided in the <a href="https://github.com/gs1/geocode/blob/main/README.md" target="_blank">README page</a></p>
+
+<div id="mapblock">
+<div class="map_container" :class="showingInputMap ? 'showing' : 'hidden'">
+ <div id="map"></div>
+</div>
+<span style="float: right;"><input type="button" :value="showingInputMap ? 'Hide map' : 'Show map'" @click="toggleInputMap"></span>
+</div>
+
 <div id="app1">
-
-
-	
 <h2>Latitude, longitude to geocode</h2>
 <table>
 <tr><td><label for="inputLatitude">Latitude</label></td><td><input type="text" name="inputLatitude" v-model="inputLatitude"/></td></tr>
@@ -41,8 +53,10 @@
 <tr><td><label for="outputLongitude">Longitude</label></td><td><input type="text" name="outputLongitude" v-model="outputLongitude"/></td></tr>
 </table>
 <p v-if="openStreetMapURL"><a :href="openStreetMapURL" target="_blank">View on OpenStreetMap</p>
-
 </div>
+	
+
+
 
 <script language="javascript">
 
@@ -51,6 +65,7 @@ let inputLongitude="";
 let outputLatitude="";
 let outputLongitude="";
 let inputGeocode="";
+
 
 function latlon2geocode(lat,lon) {
 
@@ -71,7 +86,11 @@ function latlon2geocode(lat,lon) {
 		let lat7=Math.floor(la*1e7+0.499);
 		let lon7=Math.floor(lo*1e7+0.499);
 
+		recentreMap(lat,lon,18);
+		showPoint(lat,lon);
+
 		rv= pad10(lat7.toString())+pad10(lon7.toString());
+		
 	}
 	return rv;
 }
@@ -87,6 +106,9 @@ function geocode2latlon(geocode) {
 		if (lon > 180) {
 		lon -=360;
 		}
+				
+		recentreMap(lat,lon,18);
+		showPoint(lat,lon);		
 				
 		return {"lat":truncateAfter7Digits(lat.toString()),"lon":truncateAfter7Digits(lon.toString())};
 	} else {
@@ -120,16 +142,32 @@ function getComponent(obj,key) {
 	}
 }
 
-	Vue.createApp({
+
+let mapblock=Vue.createApp({
+	data() {
+	   return {
+			showingInputMap : true
+	   }
+	},
+	methods : {
+		toggleInputMap: function() {
+			this.showingInputMap = !this.showingInputMap;
+		},
+	}
+}).mount("#mapblock");
+
+let app1=Vue.createApp({
 		data() {
           return {
 			inputLatitude: inputLatitude,
 			inputLongitude: inputLongitude,
-			inputGeocode: inputGeocode
+			inputGeocode: inputGeocode,
+			showingInputMap : false
 		  }
 		},
 	computed : {
 		outputGeocode : function() {
+			
 			return latlon2geocode(this.inputLatitude,this.inputLongitude);
 		},
 		decodedObject : function() {
@@ -146,6 +184,10 @@ function getComponent(obj,key) {
 		}
 	},
 	methods : {
+		toggleInputMap: function() {
+			this.showingInputMap = !this.showingInputMap;
+		},
+	
 		copyGeocode : function() {
 			this.inputGeocode = this.outputGeocode;
 		},
@@ -172,6 +214,65 @@ function getComponent(obj,key) {
 			
 	}
 }).mount("#app1");
+
+
+//var map = L.map('map').setView([52.20220197878701, 0.1281988620758057], 18);
+
+var zoom=1;
+var map = L.map('map').setView([0.00, 0.00], 1);
+
+
+L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '<br/>&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+function to7decimalplaces(val) {
+	if (val > 0) {
+		return Math.floor(1e7*val+0.4999999999)/1e7
+	} else {
+		return Math.ceil(1e7*val-0.4999999999)/1e7
+	}
+}
+
+let mapMarkers=[];
+
+
+function recentreMap(lat,lon,zoom) {
+    map.setView(new L.LatLng(lat, lon), zoom);
+}
+
+function clearMapMarkers() {
+    for(let i = 0; i < mapMarkers.length; i++){
+    map.removeLayer(mapMarkers[i]);
+    }
+    return mapMarkers.length;
+}
+
+function showPoint(lat,lon) {
+    clearMapMarkers();
+    c = new L.circle([lat,lon], {radius: 0, color: '#FF0000'});
+    c.addTo(map);
+    mapMarkers.push(c);
+    c = new L.circle([lat,lon], {radius: 5, color: '#000000', fillColor: '#000000'});
+    c.addTo(map);
+    mapMarkers.push(c);
+}
+
+map.on('click', function(e) {
+
+zoom+=2;
+if (zoom > 18) {
+zoom=18;
+}
+				console.log("Map clicked");
+				let lat=to7decimalplaces(e.latlng.lat);
+				let lon=to7decimalplaces(e.latlng.lng);
+		        app1.inputLatitude=lat
+		        app1.inputLongitude=lon;
+				recentreMap(lat,lon,zoom);
+		        showPoint(lat,lon);
+		        
+});
 
 
 </script>
