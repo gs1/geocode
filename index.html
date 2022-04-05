@@ -81,12 +81,8 @@ function latlon2geocode(lat,lon) {
 		let lo=parseFloat(lon);
 		
 		
-		if (lo < 0) { lo+=360; }
-		if (lo > 360) { lo-=360; }
-		if (lo < 0) { lo+=360; }
-		if (lo > 360) { lo-=360; }
-		if (lo < 0) { lo+=360; }
-		if (lo > 360) { lo-=360; }
+		while (lo < 0) { lo+=360; }
+		while (lo > 360) { lo-=360; }
 		
 		la+=90;
 
@@ -275,10 +271,8 @@ zoom=18;
 				let lat=to7decimalplaces(e.latlng.lat);
 				let lon=to7decimalplaces(e.latlng.lng);
 
-				for (let i=1; i<=6; i++) {
-				if (lon> 180) { lon-=360 }
-				if (lon< -180) { lon+=360 }
-				}
+				while (lon> 180) { lon-=360 }
+				while (lon< -180) { lon+=360 }
 		        app1.inputLatitude=lat
 		        app1.inputLongitude=lon;
 				recentreMap(lat,lon,zoom);
