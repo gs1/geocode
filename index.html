@@ -10,6 +10,8 @@
 	#map { width:calc(100% - 100px); height: 500px; }
   .showing {visibility: show; height:500px;} 
   .hidden {visibility: hidden;  height: 0px;} 
+  .showmap {background-color: #00FF00; font-weight: 700; border-radius: 12px;}
+  .hidemap {background-color: #FF0000; font-weight: 700; color: #FFFFFF;  border-radius: 12px;}
 
 </style>
 </head>
@@ -28,7 +30,7 @@
 <div class="map_container" :class="showingInputMap ? 'showing' : 'hidden'">
  <div id="map"></div>
 </div>
-<span style="float: right;"><input type="button" :value="showingInputMap ? 'Hide map' : 'Show map'" @click="toggleInputMap"></span>
+<span style="left: 0%;"><input type="button" :value="showingInputMap ? 'Hide map' : 'Show map'" :class="showingInputMap ? 'hidemap' : 'showmap'" @click="toggleInputMap"></span>
 </div>
 
 <div id="app1">
@@ -146,7 +148,7 @@ function getComponent(obj,key) {
 let mapblock=Vue.createApp({
 	data() {
 	   return {
-			showingInputMap : true
+			showingInputMap : false
 	   }
 	},
 	methods : {
