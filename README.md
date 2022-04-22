@@ -1,5 +1,5 @@
 # geocode
-Experimenting with all-numeric geocodes to support the delivery of parcels and logistic units that do not have a conventional postal address.
+[GSCN 21-318](https://www.gs1.org/docs/barcodes/GSCN_21-318_GSCN_Geo-coordinates.pdf) will introduce into the next edition of GS1 General Specifications a new GS1 Application Identifier (4309) for Ship-to / Deliver-to Geocode.  The expected value is a 20-digit numeric string that encodes WGS84 latitude/longitude coordinates with a precision of around 1.1 centimetres.  This is expected to be useful to support the delivery of parcels and logistic units that do not have a conventional postal address.
 
 A demo page is available at https://gs1.github.io/geocode/
 
